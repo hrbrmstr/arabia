@@ -1,6 +1,6 @@
 Package: arabia
 Type: Package
-Title: arabia title goes here otherwise CRAN checks fail
+Title: Tools to Read 'Lowrance' Binary Track Files
 Version: 0.1.0
 Date: 2018-09-11
 Authors@R: c(
@@ -8,17 +8,20 @@ Authors@R: c(
            comment = c(ORCID = "0000-0001-5670-2640"))
   )
 Maintainer: Bob Rudis <bob@rud.is>
-Description: A good description goes here otherwise CRAN checks fail.
+Description: 'Lowrance' (<http://www.lowrance.com/>) chart plotters use an ugly 
+    but straightforward binary format to encode their tracks. Tools are provided
+    to read 'SL2' files (and, very likely 'SLG' and 'SL3' files, too).
 URL: https://gitlab.com/hrbrmstr/arabia
 BugReports: https://gitlab.com/hrbrmstr/arabia/issues
 Encoding: UTF-8
-License: AGPL
+License: MIT + file LICENSE
 Suggests:
     testthat,
     covr
 Depends:
     R (>= 3.2.0)
 Imports:
-    httr,
-    jsonlite
+    dplyr,
+    tidyr,
+    purrr
 RoxygenNote: 6.0.1.9000

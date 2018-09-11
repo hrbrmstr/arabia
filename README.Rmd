@@ -4,16 +4,22 @@ output: rmarkdown::github_document
 
 # arabia
 
+Tools to Read 'Lowrance' Binary Track Files
+
 ## Description
+
+Lowrance' (<http://www.lowrance.com/>) chart plotters use an ugly but straightforward binary format to encode their tracks. Tools are provided to read 'SL2' files (and, very likely 'SLG' and 'SL3' files, too).
 
 ## What's Inside The Tin
 
 The following functions are implemented:
 
+- `read_sl2`:	Read Lowrance binary track files
+
 ## Installation
 
 ```{r eval=FALSE}
-devtools::install_github("hrbrmstr/arabia")
+devtools::install_git("https://gitlab.com/hrbrmstr/arabia")
 ```
 
 ```{r message=FALSE, warning=FALSE, error=FALSE, include=FALSE}
@@ -24,9 +30,17 @@ options(width=120)
 
 ```{r message=FALSE, warning=FALSE, error=FALSE}
 library(arabia)
+library(tidyverse)
 
 # current verison
 packageVersion("arabia")
 
 ```
 
+### Give it a go
+
+```{r}
+(xdf <- read_sl2(system.file("exdat", "example.sl2", package="arabia")))
+
+glimpse(xdf)
+```
