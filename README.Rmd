@@ -15,6 +15,7 @@ Lowrance' (<http://www.lowrance.com/>) chart plotters use an ugly but straightfo
 The following functions are implemented:
 
 - `read_sl2`:	Read Lowrance binary track files
+- `read_sl2_cpp`:	A "No Frills" Faster Version in C++
 
 ## Installation
 
@@ -40,7 +41,19 @@ packageVersion("arabia")
 ### Give it a go
 
 ```{r}
-(xdf <- read_sl2(system.file("exdat", "example.sl2", package="arabia")))
+system.time(xdf <- read_sl2(system.file("exdat", "example.sl2", package="arabia")))
+
+xdf
+
+glimpse(xdf)
+```
+
+### Now the faster one
+
+```{r}
+system.time(xdf <- read_sl2_cpp(system.file("exdat", "example.sl2", package="arabia")))
+
+xdf
 
 glimpse(xdf)
 ```
