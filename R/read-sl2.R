@@ -19,11 +19,11 @@
 read_sl2 <- function(path, verbose=TRUE) {
 
   f <- file(path.expand(path), "rb")
-  sl2 <- readBin(f, "raw", n = file.size(path.expand(path)), endian="little")
+  dat <- readBin(f, "raw", n = file.size(path.expand(path)), endian="little")
   close(f)
 
   # read in the header
-  header <- readBin(sl2, what = "raw", n = 10)
+  header <- readBin(dat, what = "raw", n = 10)
 
   format <- readBin(header[1:2], "int", size=2, endian="little", signed=FALSE)
 
@@ -45,41 +45,39 @@ read_sl2 <- function(path, verbose=TRUE) {
 
   alwaysZero <- readBin(header[7:8], "int", size=2, endian="little", signed=FALSE)
 
-  # remmove the header
-  dat <- sl2[-(1:8)]
-
   # yep, we're going to build a list the hard/slow way
   sl2_lst <- vector("list")
   idx <- 1
+  pos <- 8 # keeping track of our place in the stream
 
-  while (length(dat) > 0) {
+  while (pos < length(dat)) {
 
     # if verbose mode echo a "." every 100 records
     if (verbose && ((idx %% 100) == 0)) cat(".")
 
-    blockSize <- readBin(dat[29:30], "int", size=2, endian="little", signed=FALSE)
-    prevBlockSize <- readBin(dat[31:32], "int", size=2, endian="little", signed=FALSE)
-    packetSize <- readBin(dat[35:36], "int", size=2, endian="little", signed=FALSE)
-    frameIndex <- readBin(dat[37:40], "int", size=4, endian="little")
+    blockSize <- readBin(dat[(pos+29):(pos+30)], "int", size=2, endian="little", signed=FALSE)
+    prevBlockSize <- readBin(dat[(pos+31):(pos+32)], "int", size=2, endian="little", signed=FALSE)
+    packetSize <- readBin(dat[(pos+35):(pos+36)], "int", size=2, endian="little", signed=FALSE)
+    frameIndex <- readBin(dat[(pos+37):(pos+40)], "int", size=4, endian="little")
 
     dplyr::data_frame(
-      channel = readBin(dat[33:34], "int", size=2,endian="little", signed=FALSE),
-      upperLimit = readBin(dat[41:44], "double", size=4, endian="little"),
-      lowerLimit = readBin(dat[45:48], "double", size=4, endian="little"),
-      frequency = readBin(dat[51], "int", size=1, endian="little", signed=FALSE),
-      waterDepth = readBin(dat[65:68], "double", size=4, endian="little"),
-      keelDepth = readBin(dat[69:72], "double", size=4, endian="little"),
-      speedGps = readBin(dat[101:104], "double", size=4, endian="little"),
-      temperature = readBin(dat[105:108], "double", size=4, endian="little"),
-      lng_enc = readBin(dat[109:112], "integer", size=4, endian="little"),
-      lat_enc = readBin(dat[113:116], "integer", size=4, endian="little"),
-      speedWater = readBin(dat[117:120], "double", size=4, endian="little"),
-      track = readBin(dat[121:124], "double", size=4, endian="little"),
-      altitude = readBin(dat[125:128], "double", size=4, endian="little"),
-      heading = readBin(dat[129:132], "double", size=4, endian="little"),
-      timeOffset = readBin(dat[141:144], "integer", size=4, endian="little"),
+      channel = readBin(dat[(pos+33):(pos+34)], "int", size=2,endian="little", signed=FALSE),
+      upperLimit = readBin(dat[(pos+41):(pos+44)], "double", size=4, endian="little"),
+      lowerLimit = readBin(dat[(pos+45):(pos+48)], "double", size=4, endian="little"),
+      frequency = readBin(dat[(pos+51)], "int", size=1, endian="little", signed=FALSE),
+      waterDepth = readBin(dat[(pos+65):(pos+68)], "double", size=4, endian="little"),
+      keelDepth = readBin(dat[(pos+69):(pos+72)], "double", size=4, endian="little"),
+      speedGps = readBin(dat[(pos+101):(pos+104)], "double", size=4, endian="little"),
+      temperature = readBin(dat[(pos+105):(pos+108)], "double", size=4, endian="little"),
+      lng_enc = readBin(dat[(pos+109):(pos+112)], "integer", size=4, endian="little"),
+      lat_enc = readBin(dat[(pos+113):(pos+116)], "integer", size=4, endian="little"),
+      speedWater = readBin(dat[(pos+117):(pos+120)], "double", size=4, endian="little"),
+      track = readBin(dat[(pos+121):(pos+124)], "double", size=4, endian="little"),
+      altitude = readBin(dat[(pos+125):(pos+128)], "double", size=4, endian="little"),
+      heading = readBin(dat[(pos+129):(pos+132)], "double", size=4, endian="little"),
+      timeOffset = readBin(dat[(pos+141):(pos+144)], "integer", size=4, endian="little"),
       flags = list(
-        dat[133:134] %>%
+        dat[(pos+133):(pos+134)] %>%
           rawToBits() %>%
           as.logical() %>%
           set_names(
@@ -97,9 +95,7 @@ read_sl2 <- function(path, verbose=TRUE) {
 
     idx <- idx + 1
 
-    bounceData = dat[145:(packetSize+145-1)]
-
-    dat <- dat[-(1:(packetSize+145-1))]
+    pos <- pos + (packetSize+145-1)
 
   }
 

@@ -14,7 +14,9 @@ to read ‘SL2’ files (and, very likely ‘SLG’ and ‘SL3’ files, too).
 The following functions are implemented:
 
   - `read_sl2`: Read Lowrance binary track files
-  - `read_sl2_cpp`: A “No Frills” Faster Version in C++
+  - <strike>`read_sl2_cpp`: A “No Frills” Faster Version in C++</strike>
+    (uncomment things in the package if you want this as the OP was
+    having issues on Windoews with Rtools)
 
 ## Installation
 
@@ -47,7 +49,7 @@ system.time(xdf <- read_sl2(system.file("exdat", "example.sl2", package="arabia"
     ## .............
 
     ##    user  system elapsed 
-    ##  10.223   1.248  11.484
+    ##   2.263   0.047   2.411
 
 ``` r
 xdf
@@ -56,16 +58,16 @@ xdf
     ## # A tibble: 1,308 x 22
     ##    channel   upperLimit lowerLimit frequency waterDepth keelDepth speedGps temperature lng_enc lat_enc speedWater track
     ##    <chr>          <dbl>      <dbl> <chr>          <dbl>     <dbl>    <dbl>       <dbl>   <int>   <int>      <dbl> <dbl>
-    ##  1 Secondary          0       13.3 200 KHz         2.62     0.328      0.5        15.8 4433307 7003054        0.5  4.97
-    ##  2 DSI (Dow…          0       13.4 200 KHz         2.62     0.328      0.5        15.8 4433307 7003054        0.5  4.97
-    ##  3 Primary            0       13.3 200 KHz         2.62     0.328      0.5        15.9 4433307 7003054        0.5  4.97
-    ##  4 Secondary          0       13.3 200 KHz         2.62     0.328      0.5        15.9 4433307 7003054        0.5  4.97
-    ##  5 DSI (Dow…          0       13.4 200 KHz         2.59     0.328      0          15.8 4433307 7003054        0    4.97
-    ##  6 Secondary          0       13.3 200 KHz         2.59     0.328      0          15.8 4433307 7003054        0    4.97
-    ##  7 Secondary          0       13.3 200 KHz         2.52     0.328      0          15.9 4433307 7003054        0    4.97
-    ##  8 DSI (Dow…          0       13.4 200 KHz         2.52     0.328      0          15.9 4433307 7003054        0    4.97
-    ##  9 Primary            0       13.3 200 KHz         2.52     0.328      0          15.8 4433307 7003054        0    4.97
-    ## 10 DSI (Dow…          0       13.4 200 KHz         2.52     0.328      0          15.8 4433307 7003054        0    4.97
+    ##  1 Secondary         0.       13.3 200 KHz         2.62     0.328    0.500        15.8 4433307 7003054      0.500  4.97
+    ##  2 DSI (Dow…         0.       13.4 200 KHz         2.62     0.328    0.500        15.8 4433307 7003054      0.500  4.97
+    ##  3 Primary           0.       13.3 200 KHz         2.62     0.328    0.500        15.9 4433307 7003054      0.500  4.97
+    ##  4 Secondary         0.       13.3 200 KHz         2.62     0.328    0.500        15.9 4433307 7003054      0.500  4.97
+    ##  5 DSI (Dow…         0.       13.4 200 KHz         2.59     0.328    0.           15.8 4433307 7003054      0.     4.97
+    ##  6 Secondary         0.       13.3 200 KHz         2.59     0.328    0.           15.8 4433307 7003054      0.     4.97
+    ##  7 Secondary         0.       13.3 200 KHz         2.52     0.328    0.           15.9 4433307 7003054      0.     4.97
+    ##  8 DSI (Dow…         0.       13.4 200 KHz         2.52     0.328    0.           15.9 4433307 7003054      0.     4.97
+    ##  9 Primary           0.       13.3 200 KHz         2.52     0.328    0.           15.8 4433307 7003054      0.     4.97
+    ## 10 DSI (Dow…         0.       13.4 200 KHz         2.52     0.328    0.           15.8 4433307 7003054      0.     4.97
     ## # ... with 1,298 more rows, and 10 more variables: altitude <dbl>, heading <dbl>, timeOffset <int>, headingValid <lgl>,
     ## #   altitudeValid <lgl>, gpsSpeedValid <lgl>, waterTempValid <lgl>, positionValid <lgl>, waterSpeedValid <lgl>,
     ## #   trackValid <lgl>
@@ -98,61 +100,3 @@ glimpse(xdf)
     ## $ positionValid   <lgl> FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, ...
     ## $ waterSpeedValid <lgl> FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, ...
     ## $ trackValid      <lgl> FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, ...
-
-### Now the faster one
-
-``` r
-system.time(xdf <- read_sl2_cpp(system.file("exdat", "example.sl2", package="arabia")))
-```
-
-    ##    user  system elapsed 
-    ##   0.040   0.556   0.596
-
-``` r
-xdf
-```
-
-    ## # A tibble: 1,308 x 21
-    ##    channel upperLimit lowerLimit waterDepth keelDepth speedGps temperature speedWater track altitude heading lng_enc
-    ##      <dbl>      <dbl>      <dbl>      <dbl>     <dbl>    <dbl>       <dbl>      <dbl> <dbl>    <dbl>   <dbl>   <dbl>
-    ##  1       1          0       13.3       2.62     0.328      0.5        15.8        0.5  4.97     325.       0 4433307
-    ##  2       2          0       13.4       2.62     0.328      0.5        15.8        0.5  4.97     325.       0 4433307
-    ##  3       0          0       13.3       2.62     0.328      0.5        15.9        0.5  4.97     325.       0 4433307
-    ##  4       1          0       13.3       2.62     0.328      0.5        15.9        0.5  4.97     325.       0 4433307
-    ##  5       2          0       13.4       2.59     0.328      0          15.8        0    4.97     325.       0 4433307
-    ##  6       1          0       13.3       2.59     0.328      0          15.8        0    4.97     325.       0 4433307
-    ##  7       1          0       13.3       2.52     0.328      0          15.9        0    4.97     325.       0 4433307
-    ##  8       2          0       13.4       2.52     0.328      0          15.9        0    4.97     325.       0 4433307
-    ##  9       0          0       13.3       2.52     0.328      0          15.8        0    4.97     325.       0 4433307
-    ## 10       2          0       13.4       2.52     0.328      0          15.8        0    4.97     325.       0 4433307
-    ## # ... with 1,298 more rows, and 9 more variables: lat_enc <dbl>, timeOffset <dbl>, valid.heading <lgl>,
-    ## #   valid.altitude <lgl>, valid.gpsSpeed <lgl>, valid.waterTemp <lgl>, valid.position <lgl>, valid.waterSpeed <lgl>,
-    ## #   valid.track <lgl>
-
-``` r
-glimpse(xdf)
-```
-
-    ## Observations: 1,308
-    ## Variables: 21
-    ## $ channel          <dbl> 1, 2, 0, 1, 2, 1, 1, 2, 0, 2, 0, 2, 1, 2, 1, 2, 0, 2, 0, 2, 1, 2, 1, 2, 0, 2, 0, 2, 1, 2, ...
-    ## $ upperLimit       <dbl> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ...
-    ## $ lowerLimit       <dbl> 13.3, 13.4, 13.3, 13.3, 13.4, 13.3, 13.3, 13.4, 13.3, 13.4, 13.3, 13.4, 13.3, 13.4, 13.3, ...
-    ## $ waterDepth       <dbl> 2.620, 2.620, 2.620, 2.620, 2.586, 2.586, 2.516, 2.516, 2.516, 2.516, 2.516, 2.516, 2.516,...
-    ## $ keelDepth        <dbl> 0.328084, 0.328084, 0.328084, 0.328084, 0.328084, 0.328084, 0.328084, 0.328084, 0.328084, ...
-    ## $ speedGps         <dbl> 0.5, 0.5, 0.5, 0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, ...
-    ## $ temperature      <dbl> 15.84112, 15.84112, 15.86293, 15.86293, 15.79128, 15.79128, 15.86293, 15.86293, 15.81620, ...
-    ## $ speedWater       <dbl> 0.5, 0.5, 0.5, 0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, ...
-    ## $ track            <dbl> 4.974188, 4.974188, 4.974188, 4.974188, 4.974188, 4.974188, 4.974188, 4.974188, 4.974188, ...
-    ## $ altitude         <dbl> 324.7375, 324.7375, 324.7375, 324.7375, 324.8687, 324.8687, 324.8687, 324.8687, 324.8687, ...
-    ## $ heading          <dbl> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ...
-    ## $ lng_enc          <dbl> 4433307, 4433307, 4433307, 4433307, 4433307, 4433307, 4433307, 4433307, 4433307, 4433307, ...
-    ## $ lat_enc          <dbl> 7003054, 7003054, 7003054, 7003054, 7003054, 7003054, 7003054, 7003054, 7003054, 7003054, ...
-    ## $ timeOffset       <dbl> 1317703, 1317706, 1318036, 1318905, 1318946, 1318982, 1319130, 1319140, 1319216, 1319222, ...
-    ## $ valid.heading    <lgl> FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,...
-    ## $ valid.altitude   <lgl> TRUE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FA...
-    ## $ valid.gpsSpeed   <lgl> TRUE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FA...
-    ## $ valid.waterTemp  <lgl> FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,...
-    ## $ valid.position   <lgl> FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,...
-    ## $ valid.waterSpeed <lgl> FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,...
-    ## $ valid.track      <lgl> FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,...

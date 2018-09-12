@@ -19,6 +19,6 @@
 #' - <https://wiki.openstreetmap.org/wiki/SL2>
 #' - <https://github.com/kmpm/node-sl2format> (very helpful additional field breakdown)
 #' - <https://stackoverflow.com/q/52280751/1457051>
-#' @useDynLib arabia
-#' @importFrom Rcpp sourceCpp
 NULL
+# @useDynLib arabia
+# @importFrom Rcpp sourceCpp
