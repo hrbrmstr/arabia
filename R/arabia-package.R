@@ -20,5 +20,5 @@
 #' - <https://github.com/kmpm/node-sl2format> (very helpful additional field breakdown)
 #' - <https://stackoverflow.com/q/52280751/1457051>
 NULL
-# @useDynLib arabia
-# @importFrom Rcpp sourceCpp
+# @ useDynLib arabia
+# @ importFrom Rcpp sourceCpp
