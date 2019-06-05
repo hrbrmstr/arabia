@@ -16,7 +16,7 @@ The following functions are implemented:
   - `read_sl2`: Read Lowrance binary track files
   - <strike>`read_sl2_cpp`: A “No Frills” Faster Version in C++</strike>
     (uncomment things in the package if you want this as the OP was
-    having issues on Windoews with Rtools) &mdash; look in `old-source` 
+    having issues on Windows with Rtools) &mdash; look in `old-source` 
     for the CPP version
 
 ## Installation
